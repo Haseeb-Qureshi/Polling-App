@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
       GROUP BY
         polls.id
       HAVING
-        COUNT(questions.id) = COUNT(responses.id)
+        COUNT(DISTINCT questions.id) = COUNT(DISTINCT responses.id)
     SQL
   end
 
@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
       .joins('LEFT JOIN responses ON responses.answer_choice_id = answer_choices.id')
       .where('responses.user_id = ?', id)
       .group(:poll_id)
-      .having('COUNT(questions.id) = COUNT(responses.id)')
+      .having('COUNT(DISTINCT questions.id) = COUNT(DISTINCT responses.id)')
   end
 
   def uncompleted_polls_ar
